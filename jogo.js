@@ -113,13 +113,13 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 6,
+    pulo: 4,
     pula() {
       if (!Joaninha.colidiu) {
         Joaninha.velocidade = -Joaninha.pulo;
       }
     },
-    gravidade: 0.15,
+    gravidade: 0.1,
     velocidade: 0,
     colidiu: false,
     atualiza() {
@@ -143,6 +143,7 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0 },
       { spriteX: 0, spriteY: 26 },
       { spriteX: 0, spriteY: 52 },
+      { spriteX: 0, spriteY: 26 },
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {
@@ -293,8 +294,8 @@ function criaCanos() {
     },
     pares: [],
     atualiza() {
-      const passou100Frames = frames % 100 === 0;
-      if (passou100Frames) {
+      const passou200Frames = frames % 100 === 0;
+      if (passou200Frames) {
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
