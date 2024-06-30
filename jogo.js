@@ -262,7 +262,7 @@ function criaCanos() {
       }
 
       canos.pares.forEach(function(par) {
-        par.x = par.x - 2;
+        par.x = par.x - 1.5;
 
         if(canos.temColisaoComOJoaninha(par)) {
           som_HIT.play();
