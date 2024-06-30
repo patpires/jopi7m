@@ -10,6 +10,14 @@ sprites.src = './sprites.png';
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
+// Criando as medalhas de pontuação
+const medalhas = {
+  aco: { spriteX: 0, spriteY: 75, largura: 46, altura: 48 },
+  prata: { spriteX: 47, spriteY: 75, largura: 46, altura: 48 },
+  bronze: { spriteX: 0, spriteY: 123, largura: 46, altura: 48 },
+  ouro: { spriteX: 47, spriteY: 123, largura: 46, altura: 48 },
+};
+
 
 // [Plano de Fundo]
 const planoDeFundo = {
@@ -284,21 +292,23 @@ function criaCanos() {
 function criaPlacar() {
   const placar = {
     pontuacao: 0,
+    recorde: 0,
     desenha() {
       contexto.font = '35px "VT323"';
       contexto.textAlign = 'right';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${placar.pontuacao}`, canvas.width - 10, 35);      
+      contexto.fillText(`${placar.pontuacao}`, canvas.width - 10, 35);
     },
     atualiza() {
       const intervaloDeFrames = 20;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
 
-      if(passouOIntervalo) {
+      if (passouOIntervalo) {
         placar.pontuacao = placar.pontuacao + 1;
+        placar.recorde = Math.max(placar.pontuacao, placar.recorde);
       }
-    }
-  }
+    },
+  };
   return placar;
 }
 
@@ -361,14 +371,39 @@ Telas.JOGO = {
 Telas.GAME_OVER = {
   desenha() {
     mensagemGameOver.desenha();
+
+    let medalha = null;
+    if (globais.placar.pontuacao >= 120) {
+      medalha = medalhas.ouro;
+    } else if (globais.placar.pontuacao >= 100) {
+      medalha = medalhas.bronze;
+    } else if (globais.placar.pontuacao >= 90) {
+      medalha = medalhas.prata;
+    } else if (globais.placar.pontuacao >= 60) {
+      medalha = medalhas.aco;
+    }
+
+    if (medalha) {
+      contexto.drawImage(
+        sprites,
+        medalha.spriteX, medalha.spriteY,
+        medalha.largura, medalha.altura,
+        canvas.width / 2 - medalha.largura / 2, canvas.height / 2 - 100,
+        medalha.largura, medalha.altura,
+      );
+
+      contexto.font = '25px "VT323"';
+      contexto.textAlign = 'center';
+      contexto.fillStyle = 'white';
+      contexto.fillText(`${globais.placar.pontuacao} pontos`, canvas.width / 2, canvas.height / 2 - 60);
+      contexto.fillText(`Recorde: ${globais.placar.recorde} pontos`, canvas.width / 2, canvas.height / 2 - 30);
+    }
   },
-  atualiza() {
-    
-  },
+  atualiza() {},
   click() {
     mudaParaTela(Telas.INICIO);
-  }
-}
+  },
+};
 
 function loop() {
   telaAtiva.desenha();
