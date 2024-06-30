@@ -396,7 +396,7 @@ Telas.GAME_OVER = {
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
       contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 4 - 100, canvas.height / 4 -2);
-      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 4 - 100, canvas.height / 4 - 100);
+      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 4 - 100, canvas.height / 4 - 60);
     }
   },
   atualiza() {},
