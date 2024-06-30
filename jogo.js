@@ -109,7 +109,7 @@ function criaJoaninha() {
       Joaninha.velocidade =  - Joaninha.pulo;
       //console.log('[depois]', Joaninha.velocidade);
     },
-    gravidade: 0.10,
+    gravidade: 0.20,
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
@@ -127,7 +127,7 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0, }, // asa pra cima
       { spriteX: 0, spriteY: 26, }, // asa no meio 
       { spriteX: 0, spriteY: 52, }, // asa pra baixo
-      { spriteX: 0, spriteY: 0, }, // asa no meio 
+      //{ spriteX: 0, spriteY: 26, }, // asa no meio 
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {     
@@ -136,7 +136,7 @@ function criaJoaninha() {
       // console.log('passouOIntervalo', passouOIntervalo)
 
       if(passouOIntervalo) {
-        const baseDoIncremento = 0.5;
+        const baseDoIncremento = 1;
         const incremento = baseDoIncremento + Joaninha.frameAtual;
         const baseRepeticao = Joaninha.movimentos.length;
         Joaninha.frameAtual = incremento % baseRepeticao
