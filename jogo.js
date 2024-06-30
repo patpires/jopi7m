@@ -101,16 +101,16 @@ function criaJoaninha() {
     y: 50,
     pulo: 4.6,
     pula() {
-      console.log('devo pular');
-      console.log('[antes]', Joaninha.velocidade);
+      // console('devo pular');
+      // console('[antes]', Joaninha.velocidade);
       Joaninha.velocidade =  - Joaninha.pulo;
-      console.log('[depois]', Joaninha.velocidade);
+      // console('[depois]', Joaninha.velocidade);
     },
     gravidade: 0.25,
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
-        console.log('Fez colisao');
+        // console('Fez colisao');
         som_HIT.play();
 
         mudaParaTela(Telas.GAME_OVER);
@@ -124,7 +124,7 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0, }, // asa pra cima
       { spriteX: 0, spriteY: 26, }, // asa no meio 
       { spriteX: 0, spriteY: 52, }, // asa pra baixo
-      { spriteX: 0, spriteY: 26, }, // asa no meio 
+     // { spriteX: 0, spriteY: 26, }, // asa no meio 
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {     
@@ -271,7 +271,7 @@ function criaCanos() {
     atualiza() {
       const passou100Frames = frames % 100 === 0;
       if(passou100Frames) {
-        console.log('Passou 100 frames');
+        // console('Passou 100 frames');
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
@@ -284,7 +284,7 @@ function criaCanos() {
         par.x = par.x - 2;
 
         if(canos.temColisaoComOJoaninha(par)) {
-          console.log('Você perdeu!')
+          //// console('Você perdeu!')
           som_HIT.play();
           mudaParaTela(Telas.GAME_OVER);
         }
