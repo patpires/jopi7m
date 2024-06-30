@@ -256,7 +256,7 @@ function criaCanos() {
       })
     },
     temColisaoComOJoaninha(par) {
-      const cabecaDoJoaninha = globais.Joaninha.y;
+      const cabecaDaJoaninha = globais.Joaninha.y;
       const peDaJoaninha = globais.Joaninha.y + globais.Joaninha.altura;
       
       if((globais.Joaninha.x + globais.Joaninha.largura) >= par.x) {
