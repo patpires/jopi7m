@@ -113,7 +113,7 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4,
+    pulo: 3,
     pula() {
       if (!Joaninha.colidiu) {
         Joaninha.velocidade = -Joaninha.pulo;
@@ -294,7 +294,7 @@ function criaCanos() {
     },
     pares: [],
     atualiza() {
-      const passou200Frames = frames % 100 === 0;
+      const passou200Frames = frames % 200 === 0;
       if (passou200Frames) {
         canos.pares.push({
           x: canvas.width,
