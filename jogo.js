@@ -225,12 +225,58 @@ const mensagemGameOver = {
 }
 
 // [Canos]
-// ...
-
 function criaCanos() {
   const canos = {
-    // ...
-    temColisaoComAJoaninha(par) {
+    largura: 52,
+    altura: 400,
+    chao: {
+      spriteX: 0,
+      spriteY: 169,
+    },
+    ceu: {
+      spriteX: 52,
+      spriteY: 169,
+    },
+    espaco: 120,
+    desenha() {
+      canos.pares.forEach(function(par) {
+        const yRandom = par.y;
+        const espacamentoEntreCanos = 120;
+
+        const canoCeuX = par.x;
+        const canoCeuY = yRandom;
+
+        // [Cano do Céu]
+        contexto.drawImage(
+          sprites,
+          canos.ceu.spriteX, canos.ceu.spriteY,
+          canos.largura, canos.altura,
+          canoCeuX, canoCeuY,
+          canos.largura, canos.altura,
+        );
+
+        // [Cano do Chão]
+        const canoChaoX = par.x;
+        const canoChaoY = canos.altura + espacamentoEntreCanos + yRandom;
+        contexto.drawImage(
+          sprites,
+          canos.chao.spriteX, canos.chao.spriteY,
+          canos.largura, canos.altura,
+          canoChaoX, canoChaoY,
+          canos.largura, canos.altura,
+        );
+
+        par.canoCeu = {
+          x: canoCeuX,
+          y: canos.altura + canoCeuY,
+        };
+        par.canoChao = {
+          x: canoChaoX,
+          y: canoChaoY,
+        };
+      });
+    },
+    temColisaoComOJoaninha(par) {
       const cabecaDaJoaninha = globais.Joaninha.y;
       const peDaJoaninha = globais.Joaninha.y + globais.Joaninha.altura;
 
@@ -240,9 +286,6 @@ function criaCanos() {
       ) {
         if (cabecaDaJoaninha <= par.canoCeu.y || peDaJoaninha >= par.canoChao.y) {
           globais.Joaninha.colidiu = true;
-          setTimeout(() => {
-            mudaParaTela(Telas.GAME_OVER);
-          }, 500);
           return true;
         }
       }
@@ -250,25 +293,27 @@ function criaCanos() {
     },
     pares: [],
     atualiza() {
-      const passou200Frames = frames % 200 === 0;
-      if (passou200Frames) {
+      const passou100Frames = frames % 100 === 0;
+      if (passou100Frames) {
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
         });
       }
 
-      canos.pares.forEach(function (par) {
-        if (!globais.Joaninha.colidiu) {
-          par.x = par.x - 1.5;
+      canos.pares.forEach(function(par) {
+        par.x = par.x - 2;
 
-          if (canos.temColisaoComAJoaninha(par)) {
-            som_HIT.play();
-          }
+        if (canos.temColisaoComOJoaninha(par)) {
+          som_HIT.play();
+          globais.Joaninha.colidiu = true;
+          setTimeout(() => {
+            mudaParaTela(Telas.GAME_OVER);
+          }, 500);
+        }
 
-          if (par.x + canos.largura <= 0) {
-            canos.pares.shift();
-          }
+        if (par.x + canos.largura <= 0) {
+          canos.pares.shift();
         }
       });
     },
@@ -277,7 +322,6 @@ function criaCanos() {
   return canos;
 }
 
-// ...
 function criaPlacar() {
   const placar = {
     pontuacao: 0,
