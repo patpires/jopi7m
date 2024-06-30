@@ -395,8 +395,8 @@ Telas.GAME_OVER = {
       contexto.font = '25px "VT323"';
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 6 + 2, canvas.height / 6 -10);
-      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 6 + 2, canvas.height / 6 - 7);
+      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 4 + 2, canvas.height / 6 -10);
+      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 4 + 2, canvas.height / 6 - 7);
     }
   },
   atualiza() {},
