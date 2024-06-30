@@ -18,6 +18,13 @@ const medalhas = {
   ouro: { spriteX: 47, spriteY: 123, largura: 46, altura: 48 },
 };
 
+//figura da colisão
+const figuraColisao = {
+  spriteX: 38,
+  spriteY: 0,
+  largura: 33,
+  altura: 24,
+};
 
 // [Plano de Fundo]
 const planoDeFundo = {
@@ -105,54 +112,68 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 3, // Aumentar a altura do pulo
+    pulo: 4,
     pula() {
-      Joaninha.velocidade =  - Joaninha.pulo;
+      Joaninha.velocidade = -Joaninha.pulo;
     },
-    gravidade: 0.1, // Reduzir a gravidade
+    gravidade: 0.1,
     velocidade: 0,
+    colidiu: false,
     atualiza() {
-      if(fazColisao(Joaninha, globais.chao)) {
+      if (fazColisao(Joaninha, globais.chao)) {
         som_HIT.play();
-        mudaParaTela(Telas.GAME_OVER);
+        Joaninha.colidiu = true;
+        setTimeout(() => {
+          mudaParaTela(Telas.GAME_OVER);
+        }, 500);
         return;
       }
-  
+
       Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade;
       Joaninha.y = Joaninha.y + Joaninha.velocidade;
     },
     movimentos: [
-      { spriteX: 0, spriteY: 0, }, // asa pra cima
-      { spriteX: 0, spriteY: 26, }, // asa no meio 
-      { spriteX: 0, spriteY: 52, }, // asa pra baixo
-      { spriteX: 0, spriteY: 26, }, // asa pra baixo
+      { spriteX: 0, spriteY: 0 },
+      { spriteX: 0, spriteY: 26 },
+      { spriteX: 0, spriteY: 52 },
+      { spriteX: 0, spriteY: 26 },
     ],
     frameAtual: 0,
-    atualizaOFrameAtual() {     
+    atualizaOFrameAtual() {
       const intervaloDeFrames = 10;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
 
-      if(passouOIntervalo) {
+      if (passouOIntervalo) {
         const baseDoIncremento = 1;
         const incremento = baseDoIncremento + Joaninha.frameAtual;
         const baseRepeticao = Joaninha.movimentos.length;
-        Joaninha.frameAtual = incremento % baseRepeticao
+        Joaninha.frameAtual = incremento % baseRepeticao;
       }
     },
     desenha() {
-      Joaninha.atualizaOFrameAtual();
-      const { spriteX, spriteY } = Joaninha.movimentos[Joaninha.frameAtual];
+      if (Joaninha.colidiu) {
+        contexto.drawImage(
+          sprites,
+          figuraColisao.spriteX, figuraColisao.spriteY,
+          figuraColisao.largura, figuraColisao.altura,
+          Joaninha.x, Joaninha.y,
+          figuraColisao.largura, figuraColisao.altura,
+        );
+      } else {
+        Joaninha.atualizaOFrameAtual();
+        const { spriteX, spriteY } = Joaninha.movimentos[Joaninha.frameAtual];
 
-      contexto.drawImage(
-        sprites,
-        spriteX, spriteY, // Sprite X, Sprite Y
-        Joaninha.largura, Joaninha.altura, // Tamanho do recorte na sprite
-        Joaninha.x, Joaninha.y,
-        Joaninha.largura, Joaninha.altura,
-      );
-    }
-  }
-  return Joaninha;  
+        contexto.drawImage(
+          sprites,
+          spriteX, spriteY,
+          Joaninha.largura, Joaninha.altura,
+          Joaninha.x, Joaninha.y,
+          Joaninha.largura, Joaninha.altura,
+        );
+      }
+    },
+  };
+  return Joaninha;
 }
 
 /// [mensagemGetReady]
@@ -248,13 +269,13 @@ function criaCanos() {
     temColisaoComOJoaninha(par) {
       const cabecaDaJoaninha = globais.Joaninha.y;
       const peDaJoaninha = globais.Joaninha.y + globais.Joaninha.altura;
-      
-      if((globais.Joaninha.x + globais.Joaninha.largura) >= par.x) {
-        if(cabecaDaJoaninha <= par.canoCeu.y) {
-          return true;
-        }
-
-        if(peDaJoaninha >= par.canoChao.y) {
+    
+      if (
+        globais.Joaninha.x + globais.Joaninha.largura >= par.x &&
+        globais.Joaninha.x <= par.x + canos.largura
+      ) {
+        if (cabecaDaJoaninha <= par.canoCeu.y || peDaJoaninha >= par.canoChao.y) {
+          globais.Joaninha.colidiu = true;
           return true;
         }
       }
