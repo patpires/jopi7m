@@ -395,10 +395,10 @@ Telas.GAME_OVER = {
       contexto.font = '25px "VT323"';
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 +66, canvas.height / 2 - 60);
-      contexto.fillText(`${globais.placar.recorde} `, canvas.width / 2 +66,  canvas.height / 2 - 30);
-      console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 60);
-      console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 30);
+      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 +66, canvas.height / 2 - 120);
+      contexto.fillText(`${globais.placar.recorde} `, canvas.width / 2 +66,  canvas.height / 2 - 60);
+      console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 120);
+      console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 60);
   },
   atualiza() {},
   click() {
