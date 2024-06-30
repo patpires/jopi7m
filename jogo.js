@@ -97,7 +97,8 @@ function fazColisao(Joaninha, chao) {
   const JoaninhaY = Joaninha.y + Joaninha.altura;
   const chaoY = chao.y;
 
-  if(JoaninhaY >= chaoY) {
+  if (JoaninhaY >= chaoY) {
+    Joaninha.colidiu = true;
     return true;
   }
 
@@ -266,10 +267,10 @@ function criaCanos() {
         }
       })
     },
-    temColisaoComOJoaninha(par) {
+    temColisaoComAJoaninha(par) {
       const cabecaDaJoaninha = globais.Joaninha.y;
       const peDaJoaninha = globais.Joaninha.y + globais.Joaninha.altura;
-    
+
       if (
         globais.Joaninha.x + globais.Joaninha.largura >= par.x &&
         globais.Joaninha.x <= par.x + canos.largura
@@ -294,7 +295,7 @@ function criaCanos() {
       canos.pares.forEach(function(par) {
         par.x = par.x - 1.5;
 
-        if(canos.temColisaoComOJoaninha(par)) {
+        if(canos.temColisaoComAJoaninha(par)) {
           som_HIT.play();
           mudaParaTela(Telas.GAME_OVER);
         }
