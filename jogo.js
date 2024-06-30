@@ -377,7 +377,7 @@ Telas.GAME_OVER = {
       medalha = medalhas.ouro;
     } else if (globais.placar.pontuacao >= 90) {
       medalha = medalhas.bronze;
-    } else if (globais.placar.pontuacao >= 90) {
+    } else if (globais.placar.pontuacao >= 60) {
       medalha = medalhas.prata;
     } else if (globais.placar.pontuacao >= 30) {
       medalha = medalhas.aco;
@@ -396,9 +396,9 @@ Telas.GAME_OVER = {
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
       contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 +66, canvas.height / 2 - 98);
-      contexto.fillText(`${globais.placar.recorde} `, canvas.width / 2 +66,  canvas.height / 2 - 60);
-      console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 98);
-      console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 60);
+      contexto.fillText('100', canvas.width / 2 +66,  canvas.height / 2 - 60);
+      //console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 98);
+      //console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 60);
   },
   atualiza() {},
   click() {
