@@ -11,7 +11,6 @@ sprites.src = './sprites.png';
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 
-
 // [Plano de Fundo]
 const planoDeFundo = {
   spriteX: 390,
@@ -55,10 +54,6 @@ function criaChao() {
       const movimentoDoChao = 1;
       const repeteEm = chao.largura / 2;
       const movimentacao = chao.x - movimentoDoChao;
-
-      // console.log('[chao.x]', chao.x);
-      // console.log('[repeteEm]',repeteEm);
-      // console.log('[movimentacao]', movimentacao % repeteEm);
       
       chao.x = movimentacao % repeteEm;
     },
@@ -102,20 +97,15 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4.7,
+    pulo: 6, // Aumentar a altura do pulo
     pula() {
-      //console.log('devo pular');
-      //console.log('[antes]', Joaninha.velocidade);
       Joaninha.velocidade =  - Joaninha.pulo;
-      //console.log('[depois]', Joaninha.velocidade);
     },
-    gravidade: 0.20,
+    gravidade: 0.15, // Reduzir a gravidade
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
-        //console.log('Fez colisao');
         som_HIT.play();
-
         mudaParaTela(Telas.GAME_OVER);
         return;
       }
@@ -127,13 +117,11 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0, }, // asa pra cima
       { spriteX: 0, spriteY: 26, }, // asa no meio 
       { spriteX: 0, spriteY: 52, }, // asa pra baixo
-      //{ spriteX: 0, spriteY: 26, }, // asa no meio 
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {     
       const intervaloDeFrames = 10;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
-      // console.log('passouOIntervalo', passouOIntervalo)
 
       if(passouOIntervalo) {
         const baseDoIncremento = 1;
@@ -141,9 +129,6 @@ function criaJoaninha() {
         const baseRepeticao = Joaninha.movimentos.length;
         Joaninha.frameAtual = incremento % baseRepeticao
       }
-        // console.log('[incremento]', incremento);
-        // console.log('[baseRepeticao]',baseRepeticao);
-        // console.log('[frame]', incremento % baseRepeticao);
     },
     desenha() {
       Joaninha.atualizaOFrameAtual();
@@ -160,7 +145,6 @@ function criaJoaninha() {
   }
   return Joaninha;  
 }
-
 
 /// [mensagemGetReady]
 const mensagemGetReady = {
@@ -200,10 +184,7 @@ const mensagemGameOver = {
   }
 }
 
-// 
 // [Canos]
-// 
-
 function criaCanos() {
   const canos = {
     largura: 52,
@@ -216,11 +197,11 @@ function criaCanos() {
       spriteX: 52,
       spriteY: 169,
     },
-    espaco: 80,
+    espaco: 120, // Aumentar o espaço entre os canos
     desenha() {
       canos.pares.forEach(function(par) {
         const yRandom = par.y;
-        const espacamentoEntreCanos = 90;
+        const espacamentoEntreCanos = 120; // Aumentar o espaço entre os canos
   
         const canoCeuX = par.x;
         const canoCeuY = yRandom; 
@@ -274,20 +255,16 @@ function criaCanos() {
     atualiza() {
       const passou100Frames = frames % 100 === 0;
       if(passou100Frames) {
-        //console.log('Passou 100 frames');
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
         });
       }
 
-
-
       canos.pares.forEach(function(par) {
         par.x = par.x - 2;
 
         if(canos.temColisaoComOJoaninha(par)) {
-          //console.log('Você perdeu!')
           som_HIT.play();
           mudaParaTela(Telas.GAME_OVER);
         }
@@ -324,10 +301,7 @@ function criaPlacar() {
   return placar;
 }
 
-
-// 
 // [Telas]
-// 
 const globais = {};
 let telaAtiva = {};
 function mudaParaTela(novaTela) {
@@ -396,14 +370,12 @@ Telas.GAME_OVER = {
 }
 
 function loop() {
-
   telaAtiva.desenha();
   telaAtiva.atualiza();
 
   frames = frames + 1;
   requestAnimationFrame(loop);
 }
-
 
 window.addEventListener('click', function() {
   if(telaAtiva.click) {
