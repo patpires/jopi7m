@@ -81,7 +81,7 @@ function criaChao() {
 }
 
 function fazColisao(Joaninha, chao) {
-  const Joaninha = Joaninha.y + Joaninha.altura;
+  const JoaninhaY = Joaninha.y + Joaninha.altura;
   const chaoY = chao.y;
 
   if(Joaninha >= chaoY) {
