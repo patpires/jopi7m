@@ -97,7 +97,7 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 6, // Aumentar a altura do pulo
+    pulo: 4, // Aumentar a altura do pulo
     pula() {
       Joaninha.velocidade =  - Joaninha.pulo;
     },
@@ -117,6 +117,7 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0, }, // asa pra cima
       { spriteX: 0, spriteY: 26, }, // asa no meio 
       { spriteX: 0, spriteY: 52, }, // asa pra baixo
+      { spriteX: 0, spriteY: 26, }, // asa pra baixo
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {     
