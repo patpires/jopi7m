@@ -97,7 +97,7 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4, // Aumentar a altura do pulo
+    pulo: 10, // Aumentar a altura do pulo
     pula() {
       Joaninha.velocidade =  - Joaninha.pulo;
     },
