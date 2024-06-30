@@ -113,14 +113,20 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4,
+    pulo: 6,
     pula() {
-      Joaninha.velocidade = -Joaninha.pulo;
+      if (!Joaninha.colidiu) {
+        Joaninha.velocidade = -Joaninha.pulo;
+      }
     },
-    gravidade: 0.1,
+    gravidade: 0.15,
     velocidade: 0,
     colidiu: false,
     atualiza() {
+      if (Joaninha.colidiu) {
+        return;
+      }
+
       if (fazColisao(Joaninha, globais.chao)) {
         som_HIT.play();
         Joaninha.colidiu = true;
@@ -137,10 +143,13 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0 },
       { spriteX: 0, spriteY: 26 },
       { spriteX: 0, spriteY: 52 },
-      { spriteX: 0, spriteY: 26 },
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {
+      if (Joaninha.colidiu) {
+        return;
+      }
+
       const intervaloDeFrames = 10;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
 
