@@ -397,7 +397,7 @@ Telas.GAME_OVER = {
       contexto.fillStyle = 'white';
       contexto.fillText(`${globais.placar.pontuacao} pontos`, canvas.width / 2, canvas.height / 2 - 60);
       contexto.fillText(`Recorde: ${globais.placar.recorde} pontos`, canvas.width / 2, canvas.height / 2 - 30);
-    
+      console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2, canvas.height / 2 - 60);
   },
   atualiza() {},
   click() {
