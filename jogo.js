@@ -388,15 +388,15 @@ Telas.GAME_OVER = {
         sprites,
         medalha.spriteX, medalha.spriteY,
         medalha.largura, medalha.altura,
-        canvas.width / 4 - medalha.largura/4 + 4, canvas.height / 2 - 100,
+        canvas.width / 4 - medalha.largura/4 + 5, canvas.height / 2 - 100,
         medalha.largura, medalha.altura,
       );
 
       contexto.font = '25px "VT323"';
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 4 - 90, canvas.height / 4 -20);
-      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 4 - 90, canvas.height / 4 - 60);
+      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 6 + 2, canvas.height / 6 -10);
+      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 6 + 2, canvas.height / 6 - 7);
     }
   },
   atualiza() {},
