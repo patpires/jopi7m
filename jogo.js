@@ -136,7 +136,7 @@ function criaJoaninha() {
       // console.log('passouOIntervalo', passouOIntervalo)
 
       if(passouOIntervalo) {
-        const baseDoIncremento = 1;
+        const baseDoIncremento = 0.5;
         const incremento = baseDoIncremento + Joaninha.frameAtual;
         const baseRepeticao = Joaninha.movimentos.length;
         Joaninha.frameAtual = incremento % baseRepeticao
