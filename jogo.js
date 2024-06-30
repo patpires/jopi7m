@@ -379,7 +379,7 @@ Telas.GAME_OVER = {
       medalha = medalhas.bronze;
     } else if (globais.placar.pontuacao >= 90) {
       medalha = medalhas.prata;
-    } else if (globais.placar.pontuacao >= 60) {
+    } else if (globais.placar.pontuacao >= 30) {
       medalha = medalhas.aco;
     }
 
@@ -391,12 +391,12 @@ Telas.GAME_OVER = {
         canvas.width / 4 - medalha.largura/4 + 5, canvas.height / 2 - 100,
         medalha.largura, medalha.altura,
       );
-}
+    }
       contexto.font = '25px "VT323"';
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2, canvas.height / 2 - 60);
-      contexto.fillText(`${globais.placar.recorde} `, canvas.width / 2, canvas.height / 2 - 30);
+      contexto.fillText(`${globais.placar.pontuacao} pontos`, canvas.width / 2, canvas.height / 2 - 60);
+      contexto.fillText(`Recorde: ${globais.placar.recorde} pontos`, canvas.width / 2, canvas.height / 2 - 30);
     
   },
   atualiza() {},
