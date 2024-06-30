@@ -102,18 +102,18 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4.6,
+    pulo: 4.7,
     pula() {
-      console.log('devo pular');
-      console.log('[antes]', Joaninha.velocidade);
+      //console.log('devo pular');
+      //console.log('[antes]', Joaninha.velocidade);
       Joaninha.velocidade =  - Joaninha.pulo;
-      console.log('[depois]', Joaninha.velocidade);
+      //console.log('[depois]', Joaninha.velocidade);
     },
     gravidade: 0.20,
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
-        console.log('Fez colisao');
+        //console.log('Fez colisao');
         som_HIT.play();
 
         mudaParaTela(Telas.GAME_OVER);
@@ -274,7 +274,7 @@ function criaCanos() {
     atualiza() {
       const passou100Frames = frames % 100 === 0;
       if(passou100Frames) {
-        console.log('Passou 100 frames');
+        //console.log('Passou 100 frames');
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
@@ -287,7 +287,7 @@ function criaCanos() {
         par.x = par.x - 2;
 
         if(canos.temColisaoComOJoaninha(par)) {
-          console.log('Você perdeu!')
+          //console.log('Você perdeu!')
           som_HIT.play();
           mudaParaTela(Telas.GAME_OVER);
         }
