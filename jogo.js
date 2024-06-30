@@ -109,7 +109,7 @@ function criaJoaninha() {
       Joaninha.velocidade =  - Joaninha.pulo;
       //console.log('[depois]', Joaninha.velocidade);
     },
-    gravidade: 0.20,
+    gravidade: 0.10,
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
@@ -127,7 +127,7 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 0, }, // asa pra cima
       { spriteX: 0, spriteY: 26, }, // asa no meio 
       { spriteX: 0, spriteY: 52, }, // asa pra baixo
-      //{ spriteX: 0, spriteY: 26, }, // asa no meio 
+      { spriteX: 0, spriteY: 0, }, // asa no meio 
     ],
     frameAtual: 0,
     atualizaOFrameAtual() {     
@@ -313,7 +313,7 @@ function criaPlacar() {
       contexto.fillText(`${placar.pontuacao}`, canvas.width - 10, 35);      
     },
     atualiza() {
-      const intervaloDeFrames = 20;
+      const intervaloDeFrames = 50;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
 
       if(passouOIntervalo) {
