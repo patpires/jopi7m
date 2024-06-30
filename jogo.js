@@ -373,13 +373,13 @@ Telas.GAME_OVER = {
     mensagemGameOver.desenha();
 
     let medalha = null;
-    if (globais.placar.pontuacao >= 120) {
+    if (globais.placar.pontuacao >= 100) {
       medalha = medalhas.ouro;
-    } else if (globais.placar.pontuacao >= 100) {
+    } else if (globais.placar.pontuacao >= 90) {
       medalha = medalhas.bronze;
     } else if (globais.placar.pontuacao >= 90) {
       medalha = medalhas.prata;
-    } else if (globais.placar.pontuacao >= 60) {
+    } else if (globais.placar.pontuacao >= 30) {
       medalha = medalhas.aco;
     }
 
@@ -388,15 +388,15 @@ Telas.GAME_OVER = {
         sprites,
         medalha.spriteX, medalha.spriteY,
         medalha.largura, medalha.altura,
-        canvas.width / 2 - medalha.largura / 2, canvas.height / 2 - 100,
+        canvas.width / 2 - 30 / 2, canvas.height / 2 - 80,
         medalha.largura, medalha.altura,
       );
 
       contexto.font = '25px "VT323"';
       contexto.textAlign = 'center';
       contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} pontos`, canvas.width / 2, canvas.height / 2 - 60);
-      contexto.fillText(`Recorde: ${globais.placar.recorde} pontos`, canvas.width / 2, canvas.height / 2 - 30);
+      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2, canvas.height / 2 - 40);
+      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 2, canvas.height / 2 - 10);
     }
   },
   atualiza() {},
