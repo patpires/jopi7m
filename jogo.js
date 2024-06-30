@@ -1,6 +1,3 @@
-console.log('[DevSoutinho] Flappy Bird');
-console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
-
 let frames = 0;
 const som_HIT = new Audio();
 som_HIT.src = './efeitos/hit.wav';
@@ -83,19 +80,19 @@ function criaChao() {
   return chao;
 }
 
-function fazColisao(flappyBird, chao) {
-  const flappyBirdY = flappyBird.y + flappyBird.altura;
+function fazColisao(Joaninha, chao) {
+  const Joaninha = Joaninha.y + Joaninha.altura;
   const chaoY = chao.y;
 
-  if(flappyBirdY >= chaoY) {
+  if(Joaninha >= chaoY) {
     return true;
   }
 
   return false;
 }
 
-function criaFlappyBird() {
-  const flappyBird = {
+function criaJoaninha() {
+  const Joaninha = {
     spriteX: 0,
     spriteY: 0,
     largura: 33,
@@ -105,14 +102,14 @@ function criaFlappyBird() {
     pulo: 4.6,
     pula() {
       console.log('devo pular');
-      console.log('[antes]', flappyBird.velocidade);
-      flappyBird.velocidade =  - flappyBird.pulo;
-      console.log('[depois]', flappyBird.velocidade);
+      console.log('[antes]', Joaninha.velocidade);
+      Joaninha.velocidade =  - Joaninha.pulo;
+      console.log('[depois]', Joaninha.velocidade);
     },
     gravidade: 0.25,
     velocidade: 0,
     atualiza() {
-      if(fazColisao(flappyBird, globais.chao)) {
+      if(fazColisao(Joaninha, globais.chao)) {
         console.log('Fez colisao');
         som_HIT.play();
 
@@ -120,8 +117,8 @@ function criaFlappyBird() {
         return;
       }
   
-      flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
-      flappyBird.y = flappyBird.y + flappyBird.velocidade;
+      Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade;
+      Joaninha.y = Joaninha.y + Joaninha.velocidade;
     },
     movimentos: [
       { spriteX: 0, spriteY: 0, }, // asa pra cima
@@ -137,28 +134,28 @@ function criaFlappyBird() {
 
       if(passouOIntervalo) {
         const baseDoIncremento = 1;
-        const incremento = baseDoIncremento + flappyBird.frameAtual;
-        const baseRepeticao = flappyBird.movimentos.length;
-        flappyBird.frameAtual = incremento % baseRepeticao
+        const incremento = baseDoIncremento + Joaninha.frameAtual;
+        const baseRepeticao = Joaninha.movimentos.length;
+        Joaninha.frameAtual = incremento % baseRepeticao
       }
         // console.log('[incremento]', incremento);
         // console.log('[baseRepeticao]',baseRepeticao);
         // console.log('[frame]', incremento % baseRepeticao);
     },
     desenha() {
-      flappyBird.atualizaOFrameAtual();
-      const { spriteX, spriteY } = flappyBird.movimentos[flappyBird.frameAtual];
+      Joaninha.atualizaOFrameAtual();
+      const { spriteX, spriteY } = Joaninha.movimentos[Joaninha.frameAtual];
 
       contexto.drawImage(
         sprites,
         spriteX, spriteY, // Sprite X, Sprite Y
-        flappyBird.largura, flappyBird.altura, // Tamanho do recorte na sprite
-        flappyBird.x, flappyBird.y,
-        flappyBird.largura, flappyBird.altura,
+        Joaninha.largura, Joaninha.altura, // Tamanho do recorte na sprite
+        Joaninha.x, Joaninha.y,
+        Joaninha.largura, Joaninha.altura,
       );
     }
   }
-  return flappyBird;  
+  return Joaninha;  
 }
 
 
@@ -255,11 +252,11 @@ function criaCanos() {
         }
       })
     },
-    temColisaoComOFlappyBird(par) {
-      const cabecaDoFlappy = globais.flappyBird.y;
-      const peDoFlappy = globais.flappyBird.y + globais.flappyBird.altura;
+    temColisaoComOJoaninha(par) {
+      const cabecaDoFlappy = globais.Joaninha.y;
+      const peDoFlappy = globais.Joaninha.y + globais.Joaninha.altura;
       
-      if((globais.flappyBird.x + globais.flappyBird.largura) >= par.x) {
+      if((globais.Joaninha.x + globais.Joaninha.largura) >= par.x) {
         if(cabecaDoFlappy <= par.canoCeu.y) {
           return true;
         }
@@ -286,7 +283,7 @@ function criaCanos() {
       canos.pares.forEach(function(par) {
         par.x = par.x - 2;
 
-        if(canos.temColisaoComOFlappyBird(par)) {
+        if(canos.temColisaoComOJoaninha(par)) {
           console.log('Você perdeu!')
           som_HIT.play();
           mudaParaTela(Telas.GAME_OVER);
@@ -341,13 +338,13 @@ function mudaParaTela(novaTela) {
 const Telas = {
   INICIO: {
     inicializa() {
-      globais.flappyBird = criaFlappyBird();
+      globais.Joaninha = criaJoaninha();
       globais.chao = criaChao();
       globais.canos = criaCanos();
     },
     desenha() {
       planoDeFundo.desenha();
-      globais.flappyBird.desenha();
+      globais.Joaninha.desenha();
       
       globais.chao.desenha();
       mensagemGetReady.desenha();
@@ -369,16 +366,16 @@ Telas.JOGO = {
     planoDeFundo.desenha();
     globais.canos.desenha();
     globais.chao.desenha();
-    globais.flappyBird.desenha();
+    globais.Joaninha.desenha();
     globais.placar.desenha();
   },
   click() {
-    globais.flappyBird.pula();
+    globais.Joaninha.pula();
   },
   atualiza() {
     globais.canos.atualiza();
     globais.chao.atualiza();
-    globais.flappyBird.atualiza();
+    globais.Joaninha.atualiza();
     globais.placar.atualiza();
   }
 };
