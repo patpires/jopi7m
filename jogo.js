@@ -1,5 +1,5 @@
-//console.log('[DevSoutinho] Flappy Bird');
-//console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
+//creditos console.log('[DevSoutinho] Flappy Bird');
+//créditos console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
 
 let frames = 0;
 const som_HIT = new Audio();
@@ -225,57 +225,11 @@ const mensagemGameOver = {
 }
 
 // [Canos]
+// ...
+
 function criaCanos() {
   const canos = {
-    largura: 52,
-    altura: 400,
-    chao: {
-      spriteX: 0,
-      spriteY: 169,
-    },
-    ceu: {
-      spriteX: 52,
-      spriteY: 169,
-    },
-    espaco: 120, // Aumentar o espaço entre os canos
-    desenha() {
-      canos.pares.forEach(function(par) {
-        const yRandom = par.y;
-        const espacamentoEntreCanos = 120; // Aumentar o espaço entre os canos
-  
-        const canoCeuX = par.x;
-        const canoCeuY = yRandom; 
-
-        // [Cano do Céu]
-        contexto.drawImage(
-          sprites, 
-          canos.ceu.spriteX, canos.ceu.spriteY,
-          canos.largura, canos.altura,
-          canoCeuX, canoCeuY,
-          canos.largura, canos.altura,
-        )
-        
-        // [Cano do Chão]
-        const canoChaoX = par.x;
-        const canoChaoY = canos.altura + espacamentoEntreCanos + yRandom; 
-        contexto.drawImage(
-          sprites, 
-          canos.chao.spriteX, canos.chao.spriteY,
-          canos.largura, canos.altura,
-          canoChaoX, canoChaoY,
-          canos.largura, canos.altura,
-        )
-
-        par.canoCeu = {
-          x: canoCeuX,
-          y: canos.altura + canoCeuY
-        }
-        par.canoChao = {
-          x: canoChaoX,
-          y: canoChaoY
-        }
-      })
-    },
+    // ...
     temColisaoComAJoaninha(par) {
       const cabecaDaJoaninha = globais.Joaninha.y;
       const peDaJoaninha = globais.Joaninha.y + globais.Joaninha.altura;
@@ -286,6 +240,9 @@ function criaCanos() {
       ) {
         if (cabecaDaJoaninha <= par.canoCeu.y || peDaJoaninha >= par.canoChao.y) {
           globais.Joaninha.colidiu = true;
+          setTimeout(() => {
+            mudaParaTela(Telas.GAME_OVER);
+          }, 500);
           return true;
         }
       }
@@ -294,32 +251,33 @@ function criaCanos() {
     pares: [],
     atualiza() {
       const passou200Frames = frames % 200 === 0;
-      if(passou200Frames) {
+      if (passou200Frames) {
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
         });
       }
 
-      canos.pares.forEach(function(par) {
-        par.x = par.x - 1.5;
+      canos.pares.forEach(function (par) {
+        if (!globais.Joaninha.colidiu) {
+          par.x = par.x - 1.5;
 
-        if(canos.temColisaoComAJoaninha(par)) {
-          som_HIT.play();
-          mudaParaTela(Telas.GAME_OVER);
-        }
+          if (canos.temColisaoComAJoaninha(par)) {
+            som_HIT.play();
+          }
 
-        if(par.x + canos.largura <= 0) {
-          canos.pares.shift();
+          if (par.x + canos.largura <= 0) {
+            canos.pares.shift();
+          }
         }
       });
-
-    }
-  }
+    },
+  };
 
   return canos;
 }
 
+// ...
 function criaPlacar() {
   const placar = {
     pontuacao: 0,
