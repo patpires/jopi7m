@@ -101,7 +101,7 @@ function criaJoaninha() {
     pula() {
       Joaninha.velocidade =  - Joaninha.pulo;
     },
-    gravidade: 0.15, // Reduzir a gravidade
+    gravidade: 0.1, // Reduzir a gravidade
     velocidade: 0,
     atualiza() {
       if(fazColisao(Joaninha, globais.chao)) {
