@@ -254,8 +254,8 @@ function criaCanos() {
     },
     pares: [],
     atualiza() {
-      const passou100Frames = frames % 100 === 0;
-      if(passou100Frames) {
+      const passou200Frames = frames % 200 === 0;
+      if(passou200Frames) {
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
