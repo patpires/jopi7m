@@ -1,5 +1,6 @@
-//creditos console.log('[DevSoutinho] Flappy Bird');
-//créditos console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
+// Créditos
+console.log('[DevSoutinho] Flappy Bird');
+console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
 
 let frames = 0;
 const som_HIT = new Audio();
@@ -10,6 +11,7 @@ sprites.src = './sprites.png';
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
+
 // Criando as medalhas de pontuação
 const medalhas = {
   aco: { spriteX: 0, spriteY: 75, largura: 46, altura: 48 },
@@ -18,7 +20,7 @@ const medalhas = {
   ouro: { spriteX: 47, spriteY: 123, largura: 46, altura: 48 },
 };
 
-//figura da colisão
+// Figura da colisão
 const figuraColisao = {
   spriteX: 38,
   spriteY: 0,
@@ -113,39 +115,15 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 3,
+    pulo: 6, // Aumentar a altura do pulo
     pula() {
       if (!Joaninha.colidiu) {
         Joaninha.velocidade = -Joaninha.pulo;
       }
     },
-    gravidade: 0.1,
+    gravidade: 0.15, // Reduzir a gravidade
     velocidade: 0,
     colidiu: false,
-    atualiza() {
-      if (Joaninha.colidiu) {
-        return;
-      }
-
-      if (fazColisao(Joaninha, globais.chao)) {
-        som_HIT.play();
-        Joaninha.colidiu = true;
-        setTimeout(() => {
-          mudaParaTela(Telas.GAME_OVER);
-        }, 500);
-        return;
-      }
-
-      Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade;
-      Joaninha.y = Joaninha.y + Joaninha.velocidade;
-    },
-    movimentos: [
-      { spriteX: 0, spriteY: 0 },
-      { spriteX: 0, spriteY: 26 },
-      { spriteX: 0, spriteY: 52 },
-      { spriteX: 0, spriteY: 26 },
-    ],
-    frameAtual: 0,
     atualiza(deltaTime) {
       if (Joaninha.colidiu) {
         return;
@@ -162,6 +140,24 @@ function criaJoaninha() {
 
       Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade * deltaTime / 1000; // Ajuste a velocidade da Joaninha usando o delta time
       Joaninha.y = Joaninha.y + Joaninha.velocidade;
+    },
+    movimentos: [
+      { spriteX: 0, spriteY: 0 },
+      { spriteX: 0, spriteY: 26 },
+      { spriteX: 0, spriteY: 52 },
+      { spriteX: 0, spriteY: 26 },
+    ],
+    frameAtual: 0,
+    atualizaOFrameAtual() {     
+      const intervaloDeFrames = 10;
+      const passouOIntervalo = frames % intervaloDeFrames === 0;
+
+      if(passouOIntervalo) {
+        const baseDoIncremento = 1;
+        const incremento = baseDoIncremento + Joaninha.frameAtual;
+        const baseRepeticao = Joaninha.movimentos.length;
+        Joaninha.frameAtual = incremento % baseRepeticao
+      }
     },
     desenha() {
       if (Joaninha.colidiu) {
@@ -224,6 +220,32 @@ const mensagemGameOver = {
       mensagemGameOver.x, mensagemGameOver.y,
       mensagemGameOver.w, mensagemGameOver.h
     );
+
+    let medalha = null;
+    if (globais.placar.pontuacao >= 100) {
+      medalha = medalhas.ouro;
+    } else if (globais.placar.pontuacao >= 90) {
+      medalha = medalhas.bronze;
+    } else if (globais.placar.pontuacao >= 60) {
+      medalha = medalhas.prata;
+    } else if (globais.placar.pontuacao >= 30) {
+      medalha = medalhas.aco;
+    }
+
+    if (medalha) {
+      contexto.drawImage(
+        sprites,
+        medalha.spriteX, medalha.spriteY,
+        medalha.largura, medalha.altura,
+        canvas.width / 4 - medalha.largura/4 + 5, canvas.height / 2 - 100,
+        medalha.largura, medalha.altura,
+      );
+    }
+    contexto.font = '25px "VT323"';
+    contexto.textAlign = 'center';
+    contexto.fillStyle = 'white';
+    contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 + 66, canvas.height / 2 - 98);
+    contexto.fillText('100', canvas.width / 2 + 66, canvas.height / 2 - 60);
   }
 }
 
@@ -308,7 +330,7 @@ function criaCanos() {
         if (!globais.Joaninha.colidiu) {
           par.x = par.x - 100 * deltaTime / 1000; // Ajuste a velocidade dos canos usando o delta time
     
-          if (canos.temColisaoComAJoaninha(par)) {
+          if (canos.temColisaoComOJoaninha(par)) {
             som_HIT.play();
           }
     
@@ -426,13 +448,11 @@ Telas.GAME_OVER = {
         medalha.largura, medalha.altura,
       );
     }
-      contexto.font = '25px "VT323"';
-      contexto.textAlign = 'center';
-      contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 +66, canvas.height / 2 - 98);
-      contexto.fillText('100', canvas.width / 2 +66,  canvas.height / 2 - 60);
-      //console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 98);
-      //console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 60);
+    contexto.font = '25px "VT323"';
+    contexto.textAlign = 'center';
+    contexto.fillStyle = 'white';
+    contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 + 66, canvas.height / 2 - 98);
+    contexto.fillText('100', canvas.width / 2 + 66, canvas.height / 2 - 60);
   },
   atualiza() {},
   click() {
@@ -441,7 +461,7 @@ Telas.GAME_OVER = {
 };
 
 function loop(tempo) {
-  if (tempoDoUltimoQuadro === null) {
+  if (tempoDoUltimoQuadro === 0) {
     tempoDoUltimoQuadro = tempo;
   }
   const deltaTime = tempo - tempoDoUltimoQuadro;
@@ -461,4 +481,4 @@ window.addEventListener('click', function() {
 });
 
 mudaParaTela(Telas.INICIO);
-loop();
+requestAnimationFrame(loop);
