@@ -4,7 +4,7 @@
 let frames = 0;
 const som_HIT = new Audio();
 som_HIT.src = './efeitos/hit.wav';
-
+let tempoDoUltimoQuadro = 0;
 const sprites = new Image();
 sprites.src = './sprites.png';
 
@@ -65,8 +65,8 @@ function criaChao() {
     altura: 112,
     x: 0,
     y: canvas.height - 112,
-    atualiza() {
-      const movimentoDoChao = 1;
+    atualiza(deltaTime) {
+      const movimentoDoChao = 100 * deltaTime / 1000; // Ajuste a velocidade do chão usando o delta time
       const repeteEm = chao.largura / 2;
       const movimentacao = chao.x - movimentoDoChao;
       
@@ -146,20 +146,22 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 26 },
     ],
     frameAtual: 0,
-    atualizaOFrameAtual() {
+    atualiza(deltaTime) {
       if (Joaninha.colidiu) {
         return;
       }
 
-      const intervaloDeFrames = 10;
-      const passouOIntervalo = frames % intervaloDeFrames === 0;
-
-      if (passouOIntervalo) {
-        const baseDoIncremento = 1;
-        const incremento = baseDoIncremento + Joaninha.frameAtual;
-        const baseRepeticao = Joaninha.movimentos.length;
-        Joaninha.frameAtual = incremento % baseRepeticao;
+      if (fazColisao(Joaninha, globais.chao)) {
+        som_HIT.play();
+        Joaninha.colidiu = true;
+        setTimeout(() => {
+          mudaParaTela(Telas.GAME_OVER);
+        }, 500);
+        return;
       }
+
+      Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade * deltaTime / 1000; // Ajuste a velocidade da Joaninha usando o delta time
+      Joaninha.y = Joaninha.y + Joaninha.velocidade;
     },
     desenha() {
       if (Joaninha.colidiu) {
@@ -293,7 +295,7 @@ function criaCanos() {
       return false;
     },
     pares: [],
-    atualiza() {
+    atualiza(deltaTime) {
       const passou200Frames = frames % 200 === 0;
       if (passou200Frames) {
         canos.pares.push({
@@ -301,20 +303,18 @@ function criaCanos() {
           y: -150 * (Math.random() + 1),
         });
       }
-
-      canos.pares.forEach(function(par) {
-        par.x = par.x - 2;
-
-        if (canos.temColisaoComOJoaninha(par)) {
-          som_HIT.play();
-          globais.Joaninha.colidiu = true;
-          setTimeout(() => {
-            mudaParaTela(Telas.GAME_OVER);
-          }, 500);
-        }
-
-        if (par.x + canos.largura <= 0) {
-          canos.pares.shift();
+    
+      canos.pares.forEach(function (par) {
+        if (!globais.Joaninha.colidiu) {
+          par.x = par.x - 100 * deltaTime / 1000; // Ajuste a velocidade dos canos usando o delta time
+    
+          if (canos.temColisaoComAJoaninha(par)) {
+            som_HIT.play();
+          }
+    
+          if (par.x + canos.largura <= 0) {
+            canos.pares.shift();
+          }
         }
       });
     },
@@ -374,9 +374,9 @@ const Telas = {
     click() {
       mudaParaTela(Telas.JOGO);
     },
-    atualiza() {
-      globais.chao.atualiza();
-    }
+    atualiza(deltaTime) {
+      globais.chao.atualiza(deltaTime);
+    },
   }
 };
 
@@ -394,12 +394,12 @@ Telas.JOGO = {
   click() {
     globais.Joaninha.pula();
   },
-  atualiza() {
-    globais.canos.atualiza();
-    globais.chao.atualiza();
-    globais.Joaninha.atualiza();
+  atualiza(deltaTime) {
+    globais.canos.atualiza(deltaTime);
+    globais.chao.atualiza(deltaTime);
+    globais.Joaninha.atualiza(deltaTime);
     globais.placar.atualiza();
-  }
+  },
 };
 
 Telas.GAME_OVER = {
@@ -440,9 +440,15 @@ Telas.GAME_OVER = {
   },
 };
 
-function loop() {
+function loop(tempo) {
+  if (tempoDoUltimoQuadro === null) {
+    tempoDoUltimoQuadro = tempo;
+  }
+  const deltaTime = tempo - tempoDoUltimoQuadro;
+  tempoDoUltimoQuadro = tempo;
+
   telaAtiva.desenha();
-  telaAtiva.atualiza();
+  telaAtiva.atualiza(deltaTime);
 
   frames = frames + 1;
   requestAnimationFrame(loop);
