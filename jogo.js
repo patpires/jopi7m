@@ -332,6 +332,7 @@ function criaCanos() {
     
           if (canos.temColisaoComOJoaninha(par)) {
             som_HIT.play();
+            mudaParaTela(Telas.GAME_OVER);
           }
     
           if (par.x + canos.largura <= 0) {
