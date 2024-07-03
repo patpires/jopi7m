@@ -1,24 +1,26 @@
-//creditos console.log('[DevSoutinho] Flappy Bird');
-//créditos console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
+// Créditos
+console.log('[DevSoutinho] Flappy Bird');
+console.log('Inscreva-se no canal :D https://www.youtube.com/channel/UCzR2u5RWXWjUh7CwLSvbitA');
 
 let frames = 0;
 const som_HIT = new Audio();
 som_HIT.src = './efeitos/hit.wav';
-
+let tempoDoUltimoQuadro = 0;
 const sprites = new Image();
 sprites.src = './sprites.png';
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
+
 // Criando as medalhas de pontuação
 const medalhas = {
-  aco: { spriteX: 0, spriteY: 75, largura: 46, altura: 48 },
-  prata: { spriteX: 47, spriteY: 75, largura: 46, altura: 48 },
-  bronze: { spriteX: 0, spriteY: 123, largura: 46, altura: 48 },
-  ouro: { spriteX: 47, spriteY: 123, largura: 46, altura: 48 },
-};
+  aco: { spriteX: 0, spriteY: 78, largura: 44, altura: 44 },
+  bronze: { spriteX: 48, spriteY: 124, largura: 44, altura: 44 },
+  prata: { spriteX: 48, spriteY: 78, largura: 44, altura: 44 },
+  ouro: { spriteX: 0, spriteY: 124, largura: 44, altura: 44 },
+  };
 
-//figura da colisão
+// Figura da colisão
 const figuraColisao = {
   spriteX: 38,
   spriteY: 0,
@@ -65,11 +67,11 @@ function criaChao() {
     altura: 112,
     x: 0,
     y: canvas.height - 112,
-    atualiza() {
-      const movimentoDoChao = 1;
+    atualiza(deltaTime) {
+      const movimentoDoChao = 100 * deltaTime / 1000; // Ajuste a velocidade do chão usando o delta time
       const repeteEm = chao.largura / 2;
       const movimentacao = chao.x - movimentoDoChao;
-      
+
       chao.x = movimentacao % repeteEm;
     },
     desenha() {
@@ -80,7 +82,7 @@ function criaChao() {
         chao.x, chao.y,
         chao.largura, chao.altura,
       );
-  
+
       contexto.drawImage(
         sprites,
         chao.spriteX, chao.spriteY,
@@ -113,16 +115,16 @@ function criaJoaninha() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 3,
+    pulo: 1, // Ajustar a altura do pulo
     pula() {
       if (!Joaninha.colidiu) {
         Joaninha.velocidade = -Joaninha.pulo;
       }
     },
-    gravidade: 0.1,
+    gravidade: 1.0, // Ajustar a gravidade
     velocidade: 0,
     colidiu: false,
-    atualiza() {
+    atualiza(deltaTime) {
       if (Joaninha.colidiu) {
         return;
       }
@@ -136,7 +138,7 @@ function criaJoaninha() {
         return;
       }
 
-      Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade;
+      Joaninha.velocidade = Joaninha.velocidade + Joaninha.gravidade * deltaTime / 1000; // Ajuste a velocidade da Joaninha usando o delta time
       Joaninha.y = Joaninha.y + Joaninha.velocidade;
     },
     movimentos: [
@@ -146,19 +148,15 @@ function criaJoaninha() {
       { spriteX: 0, spriteY: 26 },
     ],
     frameAtual: 0,
-    atualizaOFrameAtual() {
-      if (Joaninha.colidiu) {
-        return;
-      }
-
+    atualizaOFrameAtual() {     
       const intervaloDeFrames = 10;
       const passouOIntervalo = frames % intervaloDeFrames === 0;
 
-      if (passouOIntervalo) {
+      if(passouOIntervalo) {
         const baseDoIncremento = 1;
         const incremento = baseDoIncremento + Joaninha.frameAtual;
         const baseRepeticao = Joaninha.movimentos.length;
-        Joaninha.frameAtual = incremento % baseRepeticao;
+        Joaninha.frameAtual = incremento % baseRepeticao
       }
     },
     desenha() {
@@ -222,6 +220,32 @@ const mensagemGameOver = {
       mensagemGameOver.x, mensagemGameOver.y,
       mensagemGameOver.w, mensagemGameOver.h
     );
+
+    let medalha = null;
+    if (globais.placar.pontuacao >= 100) {
+      medalha = medalhas.ouro;
+    } else if (globais.placar.pontuacao >= 90) {
+      medalha = medalhas.prata;
+    } else if (globais.placar.pontuacao >= 60) {
+      medalha = medalhas.bronze;
+    } else if (globais.placar.pontuacao >= 30) {
+      medalha = medalhas.aco;
+    }
+
+    if (medalha) {
+      contexto.drawImage(
+        sprites,
+        medalha.spriteX, medalha.spriteY,
+        medalha.largura, medalha.altura,
+        canvas.width / 4 - medalha.largura/4 + 5, canvas.height / 2 - 100,
+        medalha.largura, medalha.altura,
+      );
+    }
+    contexto.font = '25px "VT323"';
+    contexto.textAlign = 'center';
+    contexto.fillStyle = 'white';
+    //contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 + 66, canvas.height / 2 - 98);
+    //contexto.fillText('100', canvas.width / 2 + 66, canvas.height / 2 - 60);
   }
 }
 
@@ -293,7 +317,7 @@ function criaCanos() {
       return false;
     },
     pares: [],
-    atualiza() {
+    atualiza(deltaTime) {
       const passou200Frames = frames % 200 === 0;
       if (passou200Frames) {
         canos.pares.push({
@@ -302,19 +326,18 @@ function criaCanos() {
         });
       }
 
-      canos.pares.forEach(function(par) {
-        par.x = par.x - 2;
+      canos.pares.forEach(function (par) {
+        if (!globais.Joaninha.colidiu) {
+          par.x = par.x - 100 * deltaTime / 1000; // Ajuste a velocidade dos canos usando o delta time
 
-        if (canos.temColisaoComOJoaninha(par)) {
-          som_HIT.play();
-          globais.Joaninha.colidiu = true;
-          setTimeout(() => {
+          if (canos.temColisaoComOJoaninha(par)) {
+            som_HIT.play();
             mudaParaTela(Telas.GAME_OVER);
-          }, 500);
-        }
+          }
 
-        if (par.x + canos.largura <= 0) {
-          canos.pares.shift();
+          if (par.x + canos.largura <= 0) {
+            canos.pares.shift();
+          }
         }
       });
     },
@@ -326,7 +349,7 @@ function criaCanos() {
 function criaPlacar() {
   const placar = {
     pontuacao: 0,
-    recorde: 0,
+    recorde: localStorage.getItem('recorde') || 0,
     desenha() {
       contexto.font = '35px "VT323"';
       contexto.textAlign = 'right';
@@ -339,7 +362,10 @@ function criaPlacar() {
 
       if (passouOIntervalo) {
         placar.pontuacao = placar.pontuacao + 1;
-        placar.recorde = Math.max(placar.pontuacao, placar.recorde);
+        if (placar.pontuacao > placar.recorde) {
+          placar.recorde = placar.pontuacao;
+          localStorage.setItem('recorde', placar.recorde);
+        }
       }
     },
   };
@@ -367,16 +393,16 @@ const Telas = {
     desenha() {
       planoDeFundo.desenha();
       globais.Joaninha.desenha();
-      
+
       globais.chao.desenha();
       mensagemGetReady.desenha();
     },
     click() {
       mudaParaTela(Telas.JOGO);
     },
-    atualiza() {
-      globais.chao.atualiza();
-    }
+    atualiza(deltaTime) {
+      globais.chao.atualiza(deltaTime);
+    },
   }
 };
 
@@ -394,12 +420,12 @@ Telas.JOGO = {
   click() {
     globais.Joaninha.pula();
   },
-  atualiza() {
-    globais.canos.atualiza();
-    globais.chao.atualiza();
-    globais.Joaninha.atualiza();
+  atualiza(deltaTime) {
+    globais.canos.atualiza(deltaTime);
+    globais.chao.atualiza(deltaTime);
+    globais.Joaninha.atualiza(deltaTime);
     globais.placar.atualiza();
-  }
+  },
 };
 
 Telas.GAME_OVER = {
@@ -410,9 +436,9 @@ Telas.GAME_OVER = {
     if (globais.placar.pontuacao >= 100) {
       medalha = medalhas.ouro;
     } else if (globais.placar.pontuacao >= 90) {
-      medalha = medalhas.bronze;
-    } else if (globais.placar.pontuacao >= 60) {
       medalha = medalhas.prata;
+    } else if (globais.placar.pontuacao >= 60) {
+      medalha = medalhas.bronze;
     } else if (globais.placar.pontuacao >= 30) {
       medalha = medalhas.aco;
     }
@@ -426,13 +452,16 @@ Telas.GAME_OVER = {
         medalha.largura, medalha.altura,
       );
     }
-      contexto.font = '25px "VT323"';
-      contexto.textAlign = 'center';
-      contexto.fillStyle = 'white';
-      contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 +66, canvas.height / 2 - 98);
-      contexto.fillText('100', canvas.width / 2 +66,  canvas.height / 2 - 60);
-      //console.log(`${globais.placar.pontuacao} pontos`, canvas.width / 2+66, canvas.height / 2 - 98);
-      //console.log(`${globais.placar.recorde} record`, canvas.width / 2+66, canvas.height / 2 - 60);
+    contexto.font = '25px "VT323"';
+    contexto.textAlign = 'center';
+    contexto.fillStyle = 'white';
+    contexto.fillText(`${globais.placar.pontuacao} `, canvas.width / 2 + 66, canvas.height / 2 - 98);
+
+    if (globais.placar.recorde > 100) {
+      contexto.fillText(`${globais.placar.recorde}`, canvas.width / 2 + 66, canvas.height / 2 - 60);
+    } else {
+      contexto.fillText('100', canvas.width / 2 + 66, canvas.height / 2 - 60);
+    }
   },
   atualiza() {},
   click() {
@@ -440,9 +469,15 @@ Telas.GAME_OVER = {
   },
 };
 
-function loop() {
+function loop(tempo) {
+  if (tempoDoUltimoQuadro === 0) {
+    tempoDoUltimoQuadro = tempo;
+  }
+  const deltaTime = tempo - tempoDoUltimoQuadro;
+  tempoDoUltimoQuadro = tempo;
+
   telaAtiva.desenha();
-  telaAtiva.atualiza();
+  telaAtiva.atualiza(deltaTime);
 
   frames = frames + 1;
   requestAnimationFrame(loop);
@@ -455,4 +490,4 @@ window.addEventListener('click', function() {
 });
 
 mudaParaTela(Telas.INICIO);
-loop();
+requestAnimationFrame(loop);
